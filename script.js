@@ -5,14 +5,50 @@ const msgContainer = document.querySelector('.message-container');
 const message = document.getElementById('message');
 
 let isValid = false;
+let passwordMatch = false;
 
 function validateForm() {
-  isValid = form.checkValidity();
+  isValid = form.checkValidity(); // tirar tag novalidate da tag <form>
+  
   if (!isValid) {
     message.textContent = 'Você não preencheu todos os campos';
     message.style.color = 'red';
     msgContainer.style.borderColor = 'red';
+    return;
   }
+
+  // check if passwords match
+  if (password1El.value === password2El.value) {
+    passwordMatch = true;
+    password1El.style.borderColor = 'green';
+    password2El.style.borderColor = 'green'; 
+  } else {
+    passwordMatch = false;
+    message.textContent = 'Senhas não conferem!';
+    message.style.color = 'red';
+    msgContainer.style.borderColor = 'red';
+    password1El.style.borderColor = 'red';
+    password2El.style.borderColor = 'red'; 
+    return;
+  }
+
+  if (isValid && passwordMatch) {
+    message.textContent = 'Conta cadastrada com sucesso!'
+    message.style.color = 'green';
+    msgContainer.style.borderColor = 'green';
+  }
+}
+
+function storeFormData() {
+  const user = {
+    name: form.name.value,
+    phone: form.phone.value,
+    email: form.email.value,
+    website: form.website.value,
+    password: form.password.value
+  }
+
+  console.log(user);
 }
 
 function processFormData(e) {
@@ -20,6 +56,9 @@ function processFormData(e) {
 
   validateForm();
 
+  if (isValid && passwordMatch) {
+    storeFormData();
+  }
 }
 
 form.addEventListener('submit', processFormData);
